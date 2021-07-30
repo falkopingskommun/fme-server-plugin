@@ -28,7 +28,7 @@ Send active layers, map extent, selected destinationformat and optional username
       var origo = Origo('index.json');
       origo.on('load', function (viewer) {
         var fme = fme({
-          destinationFormat: ["DWG", "GeoJSON", "GeoPackage"],
+          destinationFormat: ["ACAD", "GeoJSON", "GeoPackage"],
           title: 'Hämta data',
           url: 'https://........'
         });
@@ -52,7 +52,7 @@ Send active layers, map extent, selected destinationformat and optional username
 ### FME Server settings (in html file)
 Option | Type | Description
 ---|---|---
-`destinationFormat` | array | File formats displayed in dropdown and sent to FME Server.
+`destinationFormat` | array | FME format short name displayed in dropdown and sent to FME Server.
 `title` | string | Modal header text. Default is "Hämta data".
 `url` | string | URL to FME Server script.
 `username` | boolean | Optional, used to add username key from localStorage to FME Server URL, default is false.
