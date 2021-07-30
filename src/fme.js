@@ -35,6 +35,8 @@ const fme = function fme(options = {}) {
         layerNames += `${el.get('name')};`;
       }
     });
+    layerNames = layerNames.slice(0, -1);
+    layerNames = layerNames.replace(/;/g, '%20');
     return layerNames;
   }
 
@@ -45,6 +47,7 @@ const fme = function fme(options = {}) {
     extent.forEach((coordinate, j) => {
       extent[j] = Math.round(coordinate * 1) / 1;
     });
+    extent = encodeURI(extent).replace(/,/g, '%20');
     return extent;
   }
 
@@ -60,7 +63,6 @@ const fme = function fme(options = {}) {
   }
 
   function sendToFME() {
-    // encodeURIComponent(fmeUrl);
     format = document.getElementById('input-DestinationFormat');
     format = `&DestinationFormat=${format.options[format.selectedIndex].text}`;
     layerName = `&layer=${getLayerName()}`;
