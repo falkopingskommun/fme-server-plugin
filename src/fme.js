@@ -97,19 +97,21 @@ const fme = function fme(options = {}) {
             target: viewer.getId()
           });
           this.addComponent(modal);
-          appendDropdownFormat();
+          if (layerTitle) {
+            appendDropdownFormat();
 
-          document.querySelector('#input-DestinationFormat').addEventListener('change', () => {
-            if (document.querySelector('#input-DestinationFormat').selectedIndex !== 0) {
-              document.querySelector('#o-fme-download-button').removeAttribute('disabled');
-            } else {
-              document.querySelector('#o-fme-download-button').disabled = true;
-            }
-          });
-          document.querySelector('#o-fme-download-button').addEventListener('click', () => {
-            sendToFME();
-            modal.closeModal();
-          });
+            document.querySelector('#input-DestinationFormat').addEventListener('change', () => {
+              if (document.querySelector('#input-DestinationFormat').selectedIndex !== 0) {
+                document.querySelector('#o-fme-download-button').removeAttribute('disabled');
+              } else {
+                document.querySelector('#o-fme-download-button').disabled = true;
+              }
+            });
+            document.querySelector('#o-fme-download-button').addEventListener('click', () => {
+              sendToFME();
+              modal.closeModal();
+            });
+          }
         },
         icon,
         tooltipText: title,
