@@ -1,7 +1,5 @@
 # FME Server plugin
 
-**PLEASE NOTE THAT THIS IS A WORK-IN-PROGRESS VERSION NOT YET OFFICIALLY RELEASED**
-
 FME Server plugin is used to download data using FME Server.
 Send active layers, map extent, selected destinationformat and optional username to FME Server.
 
