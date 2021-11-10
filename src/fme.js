@@ -1,8 +1,10 @@
 import Origo from 'Origo';
+import {getArea} from 'ol/extent'; //FM+
 
 const fme = function fme(options = {}) {
   const {
-    title = 'Hämta data'
+    title = 'Hämta data',
+    destinationFormat = '', //FM+
   } = options;
 
   const icon = '#fa-download';
@@ -17,6 +19,9 @@ const fme = function fme(options = {}) {
   let layers;
   let layerName;
   let layerTitle;
+  let extent_area; //FM+
+  let extent_area_color; //FM+
+  let fme_format; //FM+
 
   function getLayerTitle() {
     let titles = '';
@@ -50,11 +55,31 @@ const fme = function fme(options = {}) {
     extent = encodeURI(extent).replace(/,/g, '%20');
     return extent;
   }
+  //FM B
+  function getExtentArea() {
+    const map = viewer.getMap();
+    const size = map.getSize();
+    extent = map.getView().calculateExtent(size);
+    let extentarea = Math.round(getArea(extent) / 10000);
+    return extentarea;
+  }
+  
+  function getFormats() {
+    let fmeformat = '';
+    layers.forEach((el) => {
+      if (el.getVisible() === true && el.get('fme')) {
+            fmeformat = el.get('fmeformat');
+      }
+    });
+    return fmeformat;
+  }
+  //FM E
 
   function appendDropdownFormat() {
+    fme_format = getFormats(); //FM+
     const dropdown = document.getElementById('input-DestinationFormat');
-    for (let i = 0; i < options.destinationFormat.length; i += 1) {
-      const opt = options.destinationFormat[i];
+    for (let i = 0; i < fme_format.length; i += 1) { //FM
+      const opt = fme_format[i]; //FM
       const el = document.createElement('option');
       el.textContent = opt;
       el.value = opt;
@@ -82,13 +107,22 @@ const fme = function fme(options = {}) {
         click() {
           layers = viewer.getLayers();
           layerTitle = getLayerTitle();
+          //FM B
+          extent_area = getExtentArea(); 
 
+          if(extent_area > 160) {
+            extent_area_color = 'red'
+            }
+          else {
+            extent_area_color = 'green'
+            }
+            //FM E
           if (layerTitle) {
-            content = `<br>Nedan listas de lager som du kommer att hämta från den aktuella vyn:<br><br><div id="fme-list">${layerTitle}</div><br>
-                      <select id="input-DestinationFormat"><option>Välj format</option></select>
+            content = `<br>Nedan listas de lager som kommer att hämtas från den aktuella vyn:<br><br><div id="fme-list">${layerTitle}</div><br>Max area: 160 ha<br><font color='${extent_area_color}'>Aktuell area: ${extent_area} ha</font><br><br>
+                      <select id="input-DestinationFormat"><option>Välj format</option>
                       <input id="o-fme-download-button" type="button" value="Spara" disabled></input>`;
           } else {
-            content = '<p style="font-style:italic;">Du måste tända ett nedladdningsbart lager i kartan för att kunna hämta data.</p>';
+            content = '<p style="font-style:italic;">Du måste tända ett nedladdningsbart lager i kartan för att kunna hämta data. </p>';
           }
 
           modal = Origo.ui.Modal({
@@ -101,7 +135,7 @@ const fme = function fme(options = {}) {
             appendDropdownFormat();
 
             document.querySelector('#input-DestinationFormat').addEventListener('change', () => {
-              if (document.querySelector('#input-DestinationFormat').selectedIndex !== 0) {
+              if (document.querySelector('#input-DestinationFormat').selectedIndex !== 0 && extent_area_color !== 'red') { //FM
                 document.querySelector('#o-fme-download-button').removeAttribute('disabled');
               } else {
                 document.querySelector('#o-fme-download-button').disabled = true;
