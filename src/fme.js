@@ -22,6 +22,7 @@ const fme = function fme(options = {}) {
   let extent_area; //FM+
   let extent_area_color; //FM+
   let fme_format; //FM+
+  let fme_area; //FM+
 
   function getLayerTitle() {
     let titles = '';
@@ -73,6 +74,15 @@ const fme = function fme(options = {}) {
     });
     return fmeformat;
   }
+  let fmemaxarea =''
+  function getMaxArea() {
+    layers.forEach((el) => {
+      if (el.getVisible() === true && el.get('fme')) {
+            fmemaxarea = el.get('fmemaxarea');
+      }
+    });
+    return fmemaxarea;
+  }
   //FM E
 
   function appendDropdownFormat() {
@@ -109,8 +119,8 @@ const fme = function fme(options = {}) {
           layerTitle = getLayerTitle();
           //FM B
           extent_area = getExtentArea(); 
-
-          if(extent_area > 160) {
+          fme_area = getMaxArea();
+          if(extent_area > fme_area) {
             extent_area_color = 'red'
             }
           else {
@@ -118,11 +128,11 @@ const fme = function fme(options = {}) {
             }
             //FM E
           if (layerTitle) {
-            content = `<br>Nedan listas de lager som kommer att hämtas från den aktuella vyn:<br><br><div id="fme-list">${layerTitle}</div><br>Max area: 160 ha<br><font color='${extent_area_color}'>Aktuell area: ${extent_area} ha</font><br><br>
+            content = `<br>Nedan listas de lager som kommer att hämtas från den aktuella vyn:<br><br><div id="fme-list">${layerTitle}</div><br>Max area: ${fme_area} ha<br><font color='${extent_area_color}'>Aktuell area: ${extent_area} ha</font><br><br>
                       <select id="input-DestinationFormat"><option>Välj format</option>
                       <input id="o-fme-download-button" type="button" value="Spara" disabled></input>`;
           } else {
-            content = '<p style="font-style:italic;">Du måste tända ett nedladdningsbart lager i kartan för att kunna hämta data. </p>';
+            content = '<p style="font-style:italic;">Du måste tända ett nedladdningsbart lager i kartan för att kunna hämta data.</p>';
           }
 
           modal = Origo.ui.Modal({
