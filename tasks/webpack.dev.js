@@ -31,7 +31,10 @@ module.exports = merge(common, {
     new WriteFilePlugin()
   ],
   devServer: {
-    contentBase: './',
-    port: 9008
+    static: './',
+    port: 9008,
+    devMiddleware: {
+      writeToDisk: true
+    }, 
   }
 });
