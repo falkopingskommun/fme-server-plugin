@@ -35,8 +35,7 @@ const fme = function fme(options = {}) {
         layerNames += `${el.get('name')};`;
       }
     });
-    layerNames = layerNames.slice(0, -1);
-    layerNames = layerNames.replace(/;/g, '%20');
+    layerNames = layerNames.split(";").join("%20");
     return layerNames;
   }
 
