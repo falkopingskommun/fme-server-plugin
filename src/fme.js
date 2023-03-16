@@ -103,7 +103,7 @@ const fme = function fme(options = {}) {
     extent = `&extent=${getExtent()}`;
     let fmeUrl = options.url + format + layerName + extent;
     if (options.username) {
-      fmeUrl += `&username=${localStorage.getItem('username')}`;
+      fmeUrl += `&username=${sessionStorage.getItem('username')}`;
     }
     window.open(fmeUrl, '_self');
   }
